@@ -1,0 +1,51 @@
+services:
+  db:
+    container_name: db
+    image: 117154107713.dkr.ecr.us-east-1.amazonaws.com/finalproject:database
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: employees
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    networks:
+      - net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
+  app:
+    image: 117154107713.dkr.ecr.us-east-1.amazonaws.com/finalproject:backend  
+    container_name: app
+    environment:
+      # Configs
+      GROUP_NAME: Biplav
+      PORT: 81
+      APP_COLOR: lime
+      BUCKET_NAME: biplavclo835
+      IMAGE_KEY: background.jpg
+      DBPORT: 3306
+      # Secrets
+      DATABASE: employees
+      DBUSER: admin
+      DBHOST: db
+      DBPWD: admin
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY: 
+      AWS_SESSION_TOKEN: 
+    ports:
+      - "8000:81"
+    networks:
+      - net
+    restart: on-failure
+    depends_on:
+      db: 
+        condition: service_healthy
+
+networks:
+  net:
+    name: net
+

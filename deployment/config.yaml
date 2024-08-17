@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: final-config
+  namespace: final
+data:
+  GROUP_NAME: Biplav
+  PORT: "81"
+  APP_COLOR: lime
+  BUCKET_NAME: biplavclo835
+  IMAGE_KEY: background.jpg
+  DBPORT: "3306"
